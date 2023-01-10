@@ -1,0 +1,27 @@
+extends Node
+
+export(PackedScene) var asteroid
+export(PackedScene) var enemy
+
+onready var entity_spawn_point = $EntityPath/EntitySpawnPoint
+
+func _ready() -> void:
+	EventBus.connect("game_over", self, "_on_game_over")
+
+
+func _on_game_over() -> void:
+	SceneChanger.change_scene("res://menu/game_over.tscn", 3.0)
+
+
+func _on_UFOTimer_timeout() -> void:
+	var e = enemy.instance()
+	entity_spawn_point.offset = randi()
+	e.position = entity_spawn_point.position
+	$EntityContainer.add_child(e)
+
+
+func _on_AsteroidTimer_timeout() -> void:
+	var a = asteroid.instance()
+	entity_spawn_point.offset = randi()
+	a.position = entity_spawn_point.position
+	$EntityContainer.add_child(a)
