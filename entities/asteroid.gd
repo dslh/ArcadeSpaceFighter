@@ -3,34 +3,6 @@ extends RigidBody2D
 
 var hp: int = 10
 
-func create_outline() -> PoolVector2Array:
-	return PoolVector2Array([
-		Vector2(16, -64),
-		Vector2(48, -48),
-		Vector2(40, -24),
-		Vector2(48, -16),
-		Vector2(56, 0),
-		Vector2(56, 16),
-		Vector2(64, 32),
-		Vector2(56, 56),
-		Vector2(32, 48),
-		Vector2(16, 64),
-		Vector2(-24, 56),
-		Vector2(-56, 64),
-		Vector2(-64, 40),
-		Vector2(-48, 8),
-		Vector2(-64, -24),
-		Vector2(-56, -56),
-		Vector2(-24, -48),
-		Vector2(0, -56)
-	])
-
-func set_collision_shape(outline: PoolVector2Array) -> void:
-	var owner: int = create_shape_owner(self)
-	var shape = ConcavePolygonShape2D.new()
-	shape.set_segments(outline)
-	shape_owner_add_shape(owner, shape)
-
 func _ready() -> void:
 	var start_impulse: Vector2 = (Vector2.ZERO - get_global_position())*randf()
 	apply_central_impulse(start_impulse)
@@ -39,6 +11,49 @@ func _ready() -> void:
 	set_collision_shape(outline)
 	set_drawn_shape(outline)
 
+# Generate a random shape for a new asteroid
+func create_outline() -> PoolVector2Array:
+	# The number of points in the asteroid's outline, 9-24
+	# Some asteroids will have lots of detail, some will be chunky
+	var count = 9 + randi() % 15
+	var step = PI * 2 / count
+	
+	# Minimum radius for each point in the asteroid, 16-48
+	# Some asteroids will be big, some not so big.
+	var radius = 16 + randi() % 32
+	
+	# Maximum amount of random noise to be added to a point's radius, 8-32
+	# Some asteroids will be smooth, some will be spiky.
+	var noise = 8 + randi() % 24
+	
+	var points = []
+	# Avoid using append when we know the final size of the array.
+	points.resize(count)
+	
+	for i in count:
+		# Vary the angle between points by one step, for extra irregularity.
+		var angle = step * i + randf() * step
+		var dist = radius + noise * randf()
+		points[i] = Vector2(sin(angle) * dist, cos(angle) * dist)
+		
+	return PoolVector2Array(points)
+
+# Set the hitbox for a new asteroid
+func set_collision_shape(outline: PoolVector2Array) -> void:
+	# ConcavePolygonShape2D is "not advised to use for RigidBody2D nodes".
+	# We therefore perform a convex decomposition using triangulate_polygon.
+	var owner: int = create_shape_owner(self)
+	var triangles = Geometry.triangulate_polygon(outline)
+	for i in range(0, len(triangles), 3):
+		var shape = ConvexPolygonShape2D.new()
+		shape.set_points([
+			outline[triangles[i]],
+			outline[triangles[i + 1]],
+			outline[triangles[i + 2]]
+		])
+		shape_owner_add_shape(owner, shape)
+
+# Set the visible shape of a new asteroid
 func set_drawn_shape(outline: PoolVector2Array) -> void:
 	var polygon = Polygon2D.new()
 	polygon.set_polygon(outline)
