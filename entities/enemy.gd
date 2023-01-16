@@ -10,7 +10,6 @@ var hp: int = 6
 var player: Node
 
 
-
 func _physics_process(delta: float) -> void:
 	var thrust_impulse: Vector2
 	
@@ -52,3 +51,4 @@ func _on_PlayerSensor_body_entered(body: Node) -> void:
 	
 	if body.is_in_group("player"):
 		player = body
+

@@ -10,10 +10,12 @@ var can_bounce: bool = false setget set_can_bounce
 
 var bounce_number: int = 0
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var start_impulse: Vector2 = direction * IMPULSE_FACTOR
 	apply_central_impulse(start_impulse)
+	
 
 
 
@@ -55,3 +57,4 @@ func _on_RigidBody2D_body_entered(body: Node) -> void:
 
 func _on_VisibilityNotifier2D_screen_exited() -> void:
 	queue_free()
+

@@ -7,7 +7,7 @@ var hp: int = 10
 func _ready() -> void:
 	var start_impulse: Vector2 = (Vector2.ZERO - get_global_position())*randf()
 	apply_central_impulse(start_impulse)
-
+	
 
 func take_damage(value: int = 1) -> void:
 	hp -= value
@@ -17,3 +17,4 @@ func take_damage(value: int = 1) -> void:
 		queue_free()
 	else:
 		pass
+
