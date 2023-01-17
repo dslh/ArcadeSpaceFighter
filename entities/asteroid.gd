@@ -4,12 +4,29 @@ const DIRECTION_RANGE = PI / 4
 const MIN_SPEED = 200
 const MAX_SPEED = 600
 
+# Constants for shape generation
+
+const MIN_SEGMENTS = 9
+const SEGMENT_RANGE = 15
+
+const MIN_RADIUS = 16
+const RADIUS_RANGE = 32
+
+const MIN_NOISE = 8
+const NOISE_RANGE = 24
+
+# Constants for mass calculation
+const MASS_LIMIT = 50.0
+# Maximum possible size if we happen to generate a perfect circle
+const SIZE_LIMIT = PI * pow(MIN_RADIUS + RADIUS_RANGE + MIN_NOISE + NOISE_RANGE, 2)
+
 var hp: int = 10
 
 func _init() -> void:
 	var outline = create_outline()
 	set_collision_shape(outline)
 	set_drawn_shape(outline)
+	compute_mass(outline)
 
 func _ready() -> void:
 	var start_impulse: Vector2 = \
@@ -23,16 +40,16 @@ func _ready() -> void:
 func create_outline() -> PoolVector2Array:
 	# The number of points in the asteroid's outline, 9-24
 	# Some asteroids will have lots of detail, some will be chunky
-	var count = 9 + randi() % 15
+	var count = MIN_SEGMENTS + randi() % SEGMENT_RANGE
 	var step = PI * 2 / count
 	
 	# Minimum radius for each point in the asteroid, 16-48
 	# Some asteroids will be big, some not so big.
-	var radius = 16 + randi() % 32
+	var radius = MIN_RADIUS + randi() % RADIUS_RANGE
 	
 	# Maximum amount of random noise to be added to a point's radius, 8-32
 	# Some asteroids will be smooth, some will be spiky.
-	var noise = 8 + randi() % 24
+	var noise = MIN_NOISE + randi() % NOISE_RANGE
 	
 	var points = []
 	# Avoid using append when we know the final size of the array.
@@ -68,6 +85,16 @@ func set_drawn_shape(outline: PoolVector2Array) -> void:
 	polygon.set_color(Color(0.372549, 0.341176, 0.309804, 1))
 	add_child(polygon)
 
+func compute_mass(outline: PoolVector2Array) -> void:
+	var area: float = 0
+	var n = len(outline)
+	for i in n:
+		area += outline[i].x * outline[(i + 1) % n].y
+		area -= outline[i].y * outline[(i + 1) % n].x
+	area = abs(area) / 2
+	
+	print(area, "  ", SIZE_LIMIT, " ", MASS_LIMIT * area / SIZE_LIMIT)
+	set_mass(MASS_LIMIT * (area / SIZE_LIMIT))
 
 func take_damage(value: int = 1) -> void:
 	hp -= value
