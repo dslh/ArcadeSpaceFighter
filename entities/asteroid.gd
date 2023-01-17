@@ -3,13 +3,14 @@ extends RigidBody2D
 
 var hp: int = 10
 
-func _ready() -> void:
-	var start_impulse: Vector2 = (Vector2.ZERO - get_global_position())*randf()
-	apply_central_impulse(start_impulse)
-
+func _init() -> void:
 	var outline = create_outline()
 	set_collision_shape(outline)
 	set_drawn_shape(outline)
+
+func _ready() -> void:
+	var start_impulse: Vector2 = (Vector2.ZERO - get_global_position())*randf()
+	apply_central_impulse(start_impulse)
 
 # Generate a random shape for a new asteroid
 func create_outline() -> PoolVector2Array:
