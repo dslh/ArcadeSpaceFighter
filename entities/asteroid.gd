@@ -1,5 +1,8 @@
 extends RigidBody2D
 
+const DIRECTION_RANGE = PI / 4
+const MIN_SPEED = 200
+const MAX_SPEED = 600
 
 var hp: int = 10
 
@@ -9,7 +12,11 @@ func _init() -> void:
 	set_drawn_shape(outline)
 
 func _ready() -> void:
-	var start_impulse: Vector2 = (Vector2.ZERO - get_global_position())*randf()
+	var start_impulse: Vector2 = \
+		(Vector2.ZERO - get_global_position()) \
+			.normalized() \
+			.rotated(DIRECTION_RANGE * 2 * randf() - DIRECTION_RANGE) \
+			* (MIN_SPEED + (MAX_SPEED - MIN_SPEED) * randf())
 	apply_central_impulse(start_impulse)
 
 # Generate a random shape for a new asteroid
