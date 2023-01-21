@@ -32,6 +32,7 @@ func _init() -> void:
 	compute_mass(outline)
 
 func _ready() -> void:
+	add_to_group("enemy")
 	var start_impulse: Vector2 = \
 		(Vector2.ZERO - get_global_position()) \
 			.normalized() \
