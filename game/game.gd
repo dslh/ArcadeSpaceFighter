@@ -1,6 +1,5 @@
 extends Node
 
-export(PackedScene) var asteroid
 export(PackedScene) var enemy
 
 onready var entity_spawn_point = $EntityPath/EntitySpawnPoint
@@ -21,7 +20,7 @@ func _on_UFOTimer_timeout() -> void:
 
 
 func _on_AsteroidTimer_timeout() -> void:
-	var a = asteroid.instance()
+	var a = Asteroid.new()
 	entity_spawn_point.offset = randi()
 	a.position = entity_spawn_point.position
 	$EntityContainer.add_child(a)
