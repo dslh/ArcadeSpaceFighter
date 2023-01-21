@@ -1,7 +1,7 @@
 class_name Asteroid
 extends RigidBody2D
 
-const DIRECTION_RANGE = PI / 4
+const DIRECTION_RANGE = PI / 8
 const MIN_SPEED = 200
 const MAX_SPEED = 600
 
