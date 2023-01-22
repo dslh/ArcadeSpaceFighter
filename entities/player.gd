@@ -19,7 +19,7 @@ var laser_active: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	pass  # Replace with function body.
 
 
 func _unhandled_input(_event: InputEvent) -> void:
@@ -34,9 +34,11 @@ func _unhandled_input(_event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
-
 	# turn the player by applying a torque if angular speed is less than max
-	var turn: float = Input.get_action_strength("turn_right") - Input.get_action_strength("turn_left")
+	var turn: float = (
+		Input.get_action_strength("turn_right")
+		- Input.get_action_strength("turn_left")
+	)
 	# manipulate angular damping to stop the ship spinning too much.
 	if turn == 0.0:
 		angular_damp = clamp(angular_damp + delta, 0.5, MAX_DAMP)
@@ -44,12 +46,15 @@ func _physics_process(delta: float) -> void:
 		angular_damp = 0.5
 
 	if angular_velocity < MAX_TURN_SPEED:
-		apply_torque_impulse(turn*TURN_IMPULSE_FACTOR)
+		apply_torque_impulse(turn * TURN_IMPULSE_FACTOR)
 	else:
 		pass
 
 	# thrust goes "backwards" to push player forwards
-	var thrust_input: float = Input.get_action_strength("break") - Input.get_action_strength("thrust")
+	var thrust_input: float = (
+		Input.get_action_strength("break")
+		- Input.get_action_strength("thrust")
+	)
 	var thrust_impulse: Vector2 = (thrust_input * THRUST_IMPULSE_FACTOR) * transform.y
 
 	if thrust_input == 0.0:
@@ -70,7 +75,6 @@ func _physics_process(delta: float) -> void:
 
 
 func increase_health(value: int = 1) -> void:
-
 	hp += value
 
 	# ensure HP does not go above max.
@@ -132,7 +136,7 @@ func _fire_projectile() -> void:
 	p2.add_collision_exception_with(self)
 	p2.set_can_bounce(bouncing_bullets_active)
 	$ProjectileContainer.add_child(p2)
-	var time: float = 0.25 - float(bouncing_bullets_active)*0.15
+	var time: float = 0.25 - float(bouncing_bullets_active) * 0.15
 	$CannonTimer.start(time)
 
 

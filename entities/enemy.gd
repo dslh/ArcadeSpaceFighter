@@ -1,6 +1,5 @@
 extends RigidBody2D
 
-
 const THRUST_IMPULSE_FACTOR = 20.0
 
 export(PackedScene) var projectile

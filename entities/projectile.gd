@@ -18,10 +18,8 @@ func _ready() -> void:
 	
 
 
-
 func set_direction(value: Vector2 = Vector2.UP) -> void:
 	direction = value
-
 
 
 func set_can_bounce(value: bool = false) -> void:

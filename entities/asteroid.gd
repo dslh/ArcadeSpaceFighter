@@ -23,6 +23,7 @@ const SIZE_LIMIT = PI * pow(MIN_RADIUS + RADIUS_RANGE + MIN_NOISE + NOISE_RANGE,
 
 var hp: int = 10
 
+
 func _init() -> void:
 	init_material()
 
@@ -31,13 +32,15 @@ func _init() -> void:
 	set_drawn_shape(outline)
 	compute_mass(outline)
 
+
 func _ready() -> void:
 	add_to_group("enemy")
-	var start_impulse: Vector2 = \
-		(Vector2.ZERO - get_global_position()) \
-			.normalized() \
-			.rotated(DIRECTION_RANGE * 2 * randf() - DIRECTION_RANGE) \
-			* (MIN_SPEED + (MAX_SPEED - MIN_SPEED) * randf())
+	var start_impulse: Vector2 = (
+		(Vector2.ZERO - get_global_position()).normalized().rotated(
+			DIRECTION_RANGE * 2 * randf() - DIRECTION_RANGE
+		)
+		* (MIN_SPEED + (MAX_SPEED - MIN_SPEED) * randf())
+	)
 	apply_central_impulse(start_impulse)
 
 
@@ -76,6 +79,7 @@ func create_outline() -> PoolVector2Array:
 
 	return PoolVector2Array(points)
 
+
 # Set the hitbox for a new asteroid
 func set_collision_shape(outline: PoolVector2Array) -> void:
 	# ConcavePolygonShape2D is "not advised to use for RigidBody2D nodes".
@@ -84,12 +88,11 @@ func set_collision_shape(outline: PoolVector2Array) -> void:
 	var triangles = Geometry.triangulate_polygon(outline)
 	for i in range(0, len(triangles), 3):
 		var shape = ConvexPolygonShape2D.new()
-		shape.set_points([
-			outline[triangles[i]],
-			outline[triangles[i + 1]],
-			outline[triangles[i + 2]]
-		])
+		shape.set_points(
+			[outline[triangles[i]], outline[triangles[i + 1]], outline[triangles[i + 2]]]
+		)
 		shape_owner_add_shape(owner, shape)
+
 
 # Set the visible shape of a new asteroid
 func set_drawn_shape(outline: PoolVector2Array) -> void:
@@ -97,6 +100,7 @@ func set_drawn_shape(outline: PoolVector2Array) -> void:
 	polygon.set_polygon(outline)
 	polygon.set_color(Color(0.372549, 0.341176, 0.309804, 1))
 	add_child(polygon)
+
 
 func compute_mass(outline: PoolVector2Array) -> void:
 	var area: float = 0
