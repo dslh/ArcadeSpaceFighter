@@ -17,8 +17,8 @@ func _ready() -> void:
 	noise.seed = randi()
 	noise.period = 3
 	noise.octaves = 3
-	
-	var _sig_1 = EventBus.connect("player_hit", self, "_on_player_hit")
+
+	EventBus.connect("player_hit", self, "_on_player_hit")
 
 func _process(delta: float) -> void:
 	trauma = max(trauma - DECAY * delta, 0)
@@ -28,7 +28,8 @@ func _process(delta: float) -> void:
 # function add trauma to the camera causing a shake
 func add_trauma(value: float = 0.0) -> void:
 	trauma = min(trauma + value, 0.35)
-	# vibrated the controlled using the trauma & value to give some contrast between the strong and weak magnitued.
+	# vibrated the controlled using the trauma & value
+	# to give some contrast between the strong and weak magnitued.
 	Input.start_joy_vibration(0, value, trauma, 0.5)
 
 

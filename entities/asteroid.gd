@@ -25,7 +25,7 @@ var hp: int = 10
 
 func _init() -> void:
 	init_material()
-	
+
 	var outline = create_outline()
 	set_collision_shape(outline)
 	set_drawn_shape(outline)
@@ -55,25 +55,25 @@ func create_outline() -> PoolVector2Array:
 	# Some asteroids will have lots of detail, some will be chunky
 	var count = MIN_SEGMENTS + randi() % SEGMENT_RANGE
 	var step = PI * 2 / count
-	
+
 	# Minimum radius for each point in the asteroid, 16-48
 	# Some asteroids will be big, some not so big.
 	var radius = MIN_RADIUS + randi() % RADIUS_RANGE
-	
+
 	# Maximum amount of random noise to be added to a point's radius, 8-32
 	# Some asteroids will be smooth, some will be spiky.
 	var noise = MIN_NOISE + randi() % NOISE_RANGE
-	
+
 	var points = []
 	# Avoid using append when we know the final size of the array.
 	points.resize(count)
-	
+
 	for i in count:
 		# Vary the angle between points by one step, for extra irregularity.
 		var angle = step * i + randf() * step
 		var dist = radius + noise * randf()
 		points[i] = Vector2(sin(angle) * dist, cos(angle) * dist)
-		
+
 	return PoolVector2Array(points)
 
 # Set the hitbox for a new asteroid
@@ -105,7 +105,7 @@ func compute_mass(outline: PoolVector2Array) -> void:
 		area += outline[i].x * outline[(i + 1) % n].y
 		area -= outline[i].y * outline[(i + 1) % n].x
 	area = abs(area) / 2
-	
+
 	print(area, "  ", SIZE_LIMIT, " ", MASS_LIMIT * area / SIZE_LIMIT)
 	set_mass(MASS_LIMIT * (area / SIZE_LIMIT))
 

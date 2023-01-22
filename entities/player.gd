@@ -22,19 +22,19 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _unhandled_input(_event: InputEvent) -> void:
 	if Input.is_action_pressed("fire_laser") and laser_available and $LaserTimer.is_stopped():
 		laser_active = true
 		$Laser.set_is_firing(true)
 		$LaserTimer.start()
-	
+
 	if Input.is_action_just_pressed("stop"):
 		angular_damp = MAX_DAMP
 		linear_damp = MAX_DAMP
 
 
 func _physics_process(delta: float) -> void:
-	
+
 	# turn the player by applying a torque if angular speed is less than max
 	var turn: float = Input.get_action_strength("turn_right") - Input.get_action_strength("turn_left")
 	# manipulate angular damping to stop the ship spinning too much.
@@ -42,27 +42,27 @@ func _physics_process(delta: float) -> void:
 		angular_damp = clamp(angular_damp + delta, 0.5, MAX_DAMP)
 	else:
 		angular_damp = 0.5
-	
+
 	if angular_velocity < MAX_TURN_SPEED:
 		apply_torque_impulse(turn*TURN_IMPULSE_FACTOR)
 	else:
 		pass
-	
+
 	# thrust goes "backwards" to push player forwards
 	var thrust_input: float = Input.get_action_strength("break") - Input.get_action_strength("thrust")
 	var thrust_impulse: Vector2 = (thrust_input * THRUST_IMPULSE_FACTOR) * transform.y
-	
+
 	if thrust_input == 0.0:
 		linear_damp = clamp(linear_damp + delta, 0.25, MAX_DAMP)
 	else:
 		linear_damp = 0.25
-	
+
 	apply_central_impulse(thrust_impulse)
-	
+
 	# fire the cannon
 	if Input.is_action_pressed("fire_cannon") and $CannonTimer.is_stopped() and !laser_active:
 		_fire_projectile()
-	
+
 	# update powerup displays
 	$Camera/Camera2D/CanvasLayer/HUD.update_bouncing_bullet_timer($BouncingBulletTimer.time_left)
 	if !$LaserTimer.is_stopped():
@@ -70,30 +70,30 @@ func _physics_process(delta: float) -> void:
 
 
 func increase_health(value: int = 1) -> void:
-	
+
 	hp += value
-	
+
 	# ensure HP does not go above max.
 	if hp > MAX_HP:
 		hp = 10
 	else:
 		pass
-	
+
 	$Camera/Camera2D/CanvasLayer/HUD.update_health_bar(hp)
 
 
 func take_damage(value: int = 1) -> void:
 	EventBus.emit_signal("player_hit")
-	
+
 	hp -= value
-	
+
 	if hp > 0:
 		pass
 	else:
 		EventBus.emit_signal("game_over")
 		set_physics_process(false)
 		$CollisionShape2D.call_deferred("set_disabled", true)
-	
+
 	$Camera/Camera2D/CanvasLayer/HUD.update_health_bar(hp)
 
 
@@ -107,7 +107,7 @@ func set_bouncing_bullets_active(value: bool = false) -> void:
 
 func set_laser_available(value: bool = false) -> void:
 	laser_available = value
-	
+
 	if laser_available:
 		$LaserTimer.one_shot = true
 		$LaserTimer.wait_time = 3.0
