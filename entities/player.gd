@@ -91,6 +91,8 @@ func take_damage(value: int = 1) -> void:
 		pass
 	else:
 		EventBus.emit_signal("game_over")
+		set_physics_process(false)
+		$CollisionShape2D.call_deferred("set_disabled", true)
 	
 	$Camera/Camera2D/CanvasLayer/HUD.update_health_bar(hp)
 

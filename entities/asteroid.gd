@@ -36,6 +36,7 @@ func _ready() -> void:
 			* (MIN_SPEED + (MAX_SPEED - MIN_SPEED) * randf())
 	apply_central_impulse(start_impulse)
 
+
 # Generate a random shape for a new asteroid
 func create_outline() -> PoolVector2Array:
 	# The number of points in the asteroid's outline, 9-24
@@ -95,6 +96,7 @@ func compute_mass(outline: PoolVector2Array) -> void:
 	
 	print(area, "  ", SIZE_LIMIT, " ", MASS_LIMIT * area / SIZE_LIMIT)
 	set_mass(MASS_LIMIT * (area / SIZE_LIMIT))
+
 
 func take_damage(value: int = 1) -> void:
 	hp -= value

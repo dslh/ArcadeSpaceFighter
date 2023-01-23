@@ -9,12 +9,18 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "HBoxContainer",
+"class": "HighScoreLabel",
+"language": "GDScript",
+"path": "res://menu/high_score_label.gd"
+}, {
 "base": "RigidBody2D",
 "class": "Projectile2D",
 "language": "GDScript",
 "path": "res://entities/projectile.gd"
 } ]
 _global_script_class_icons={
+"HighScoreLabel": "",
 "Projectile2D": ""
 }
 
