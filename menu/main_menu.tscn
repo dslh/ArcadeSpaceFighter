@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://menu/main_menu.gd" type="Script" id=1]
 [ext_resource path="res://menu/menu_theme.tres" type="Theme" id=2]
 [ext_resource path="res://assets/recharge bd.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://menu/high_score_table.tscn" type="PackedScene" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 96
@@ -53,7 +54,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.2, 1, 1.2, 1.4, 2.8 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( -64, 256 ), Vector2( -64, 256 ), Vector2( 1856, 256 ), Vector2( 2336, 256 ), Vector2( 2816, 716 ), Vector2( -384, 716 ) ]
+"values": [ Vector2( -128, 256 ), Vector2( -64, 256 ), Vector2( 1856, 256 ), Vector2( 2336, 256 ), Vector2( 2816, 712 ), Vector2( -384, 712 ) ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("Ship:rotation_degrees")
@@ -68,7 +69,7 @@ tracks/2/keys = {
 "values": [ 90.0, 90.0, -90.0 ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("VBoxContainer/Version:modulate")
+tracks/3/path = NodePath("VBoxContainer/HSplitContainer/VBoxContainer/Version:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -80,25 +81,37 @@ tracks/3/keys = {
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
 tracks/4/type = "value"
-tracks/4/path = NodePath("VBoxContainer/Play:modulate")
+tracks/4/path = NodePath("VBoxContainer/HSplitContainer/VBoxContainer/Play:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/keys = {
-"times": PoolRealArray( 0, 2.1, 2.3 ),
+"times": PoolRealArray( 0, 1.9, 2.2 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
 tracks/5/type = "value"
-tracks/5/path = NodePath("VBoxContainer/Quit:modulate")
+tracks/5/path = NodePath("VBoxContainer/HSplitContainer/VBoxContainer/Quit:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/imported = false
 tracks/5/enabled = true
 tracks/5/keys = {
-"times": PoolRealArray( 0, 2.1, 2.3 ),
+"times": PoolRealArray( 0, 1.9, 2.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("VBoxContainer/HSplitContainer/HighScoreTable:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 2.3, 2.6 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
@@ -107,7 +120,7 @@ tracks/5/keys = {
 [sub_resource type="Animation" id=5]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath("VBoxContainer/Version:modulate")
+tracks/0/path = NodePath("VBoxContainer/HSplitContainer/VBoxContainer/Version:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -141,63 +154,87 @@ text = "Arcade Space Figher"
 align = 1
 valign = 1
 
-[node name="Play" type="MarginContainer" parent="VBoxContainer"]
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer"]
 margin_top = 497.0
 margin_right = 1920.0
-margin_bottom = 712.0
-custom_constants/margin_right = 640
+margin_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HighScoreTable" parent="VBoxContainer/HSplitContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 954.0
+margin_bottom = 583.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HSplitContainer"]
+margin_left = 966.0
+margin_right = 1920.0
+margin_bottom = 583.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Play" type="MarginContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer"]
+margin_right = 954.0
+margin_bottom = 215.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 320
 custom_constants/margin_top = 64
-custom_constants/margin_left = 640
+custom_constants/margin_left = 320
 custom_constants/margin_bottom = 64
 
-[node name="Button" type="Button" parent="VBoxContainer/Play"]
-margin_left = 640.0
+[node name="Button" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Play"]
+margin_left = 320.0
 margin_top = 64.0
-margin_right = 1280.0
+margin_right = 634.0
 margin_bottom = 151.0
 focus_neighbour_bottom = NodePath("../../Quit/Button")
 theme = ExtResource( 2 )
 text = "PLAY"
 
-[node name="Quit" type="MarginContainer" parent="VBoxContainer"]
-margin_top = 716.0
-margin_right = 1920.0
-margin_bottom = 931.0
-custom_constants/margin_right = 640
+[node name="Quit" type="MarginContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer"]
+margin_top = 219.0
+margin_right = 954.0
+margin_bottom = 434.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 320
 custom_constants/margin_top = 64
-custom_constants/margin_left = 640
+custom_constants/margin_left = 320
 custom_constants/margin_bottom = 64
 
-[node name="Button" type="Button" parent="VBoxContainer/Quit"]
-margin_left = 640.0
+[node name="Button" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Quit"]
+margin_left = 320.0
 margin_top = 64.0
-margin_right = 1280.0
+margin_right = 634.0
 margin_bottom = 151.0
 focus_neighbour_top = NodePath("../../Play/Button")
 theme = ExtResource( 2 )
 text = "QUIT"
 
-[node name="Version" type="MarginContainer" parent="VBoxContainer"]
+[node name="Version" type="MarginContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer"]
 modulate = Color( 1, 1, 1, 0 )
-margin_top = 935.0
-margin_right = 1920.0
-margin_bottom = 1080.0
-custom_constants/margin_right = 32
+margin_top = 438.0
+margin_right = 954.0
+margin_bottom = 583.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 custom_constants/margin_top = 32
 custom_constants/margin_left = 32
 custom_constants/margin_bottom = 32
 
-[node name="Label" type="Label" parent="VBoxContainer/Version"]
+[node name="Label" type="Label" parent="VBoxContainer/HSplitContainer/VBoxContainer/Version"]
 margin_left = 32.0
 margin_top = 32.0
-margin_right = 1888.0
+margin_right = 954.0
 margin_bottom = 113.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_colors/font_color = Color( 0.160784, 0.678431, 1, 1 )
 custom_fonts/font = SubResource( 2 )
 text = "v1.0.0.0
-by Jonathan Webster"
+by Jonathan & Doug"
 align = 2
 valign = 1
 
@@ -205,7 +242,7 @@ valign = 1
 environment = SubResource( 3 )
 
 [node name="Ship" type="Node2D" parent="."]
-position = Vector2( -384, 716 )
+position = Vector2( -384, 712 )
 rotation = -1.5708
 
 [node name="Cannon" type="Polygon2D" parent="Ship"]
@@ -251,5 +288,5 @@ autoplay = "FadeIn"
 anims/FadeIn = SubResource( 4 )
 anims/RESET = SubResource( 5 )
 
-[connection signal="pressed" from="VBoxContainer/Play/Button" to="." method="_on_Play_pressed"]
-[connection signal="pressed" from="VBoxContainer/Quit/Button" to="." method="_on_Quit_pressed"]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Play/Button" to="." method="_on_Play_pressed"]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Quit/Button" to="." method="_on_Quit_pressed"]

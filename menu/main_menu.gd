@@ -1,15 +1,12 @@
 extends Control
 
-
-# Declare member variables here. Examples:
-# var a: int = 2
-# var b: String = "text"
+onready var play_button = $VBoxContainer/HSplitContainer/VBoxContainer/Play/Button
+onready var quit_button = $VBoxContainer/HSplitContainer/VBoxContainer/Quit/Button
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	yield($AnimationPlayer, "animation_finished")
-	$VBoxContainer/Play/Button.grab_focus()
+	play_button.grab_focus()
 
 
 func _input(event: InputEvent) -> void:
@@ -30,5 +27,5 @@ func _on_Quit_pressed() -> void:
 
 
 func _disable_buttons() -> void:
-	$VBoxContainer/Play/Button.set_focus_mode(Control.FOCUS_NONE)
-	$VBoxContainer/Quit/Button.set_focus_mode(Control.FOCUS_NONE)
+	play_button.set_focus_mode(Control.FOCUS_NONE)
+	quit_button.set_focus_mode(Control.FOCUS_NONE)

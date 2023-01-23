@@ -40,12 +40,14 @@ func _ready() -> void:
 			* (MIN_SPEED + (MAX_SPEED - MIN_SPEED) * randf())
 	apply_central_impulse(start_impulse)
 
+
 func init_material() -> void:
 	var material = PhysicsMaterial.new()
 	material.set_bounce(0.5)
 	set_physics_material_override(material)
 	set_linear_damp(0)
 	set_angular_damp(0)
+
 
 # Generate a random shape for a new asteroid
 func create_outline() -> PoolVector2Array:
@@ -106,6 +108,7 @@ func compute_mass(outline: PoolVector2Array) -> void:
 	
 	print(area, "  ", SIZE_LIMIT, " ", MASS_LIMIT * area / SIZE_LIMIT)
 	set_mass(MASS_LIMIT * (area / SIZE_LIMIT))
+
 
 func take_damage(value: int = 1) -> void:
 	hp -= value
