@@ -1,6 +1,7 @@
+class_name Asteroid
 extends RigidBody2D
 
-const DIRECTION_RANGE = PI / 4
+const DIRECTION_RANGE = PI / 8
 const MIN_SPEED = 200
 const MAX_SPEED = 600
 
@@ -23,18 +24,29 @@ const SIZE_LIMIT = PI * pow(MIN_RADIUS + RADIUS_RANGE + MIN_NOISE + NOISE_RANGE,
 var hp: int = 10
 
 func _init() -> void:
+	init_material()
+	
 	var outline = create_outline()
 	set_collision_shape(outline)
 	set_drawn_shape(outline)
 	compute_mass(outline)
 
 func _ready() -> void:
+	add_to_group("enemy")
 	var start_impulse: Vector2 = \
 		(Vector2.ZERO - get_global_position()) \
 			.normalized() \
 			.rotated(DIRECTION_RANGE * 2 * randf() - DIRECTION_RANGE) \
 			* (MIN_SPEED + (MAX_SPEED - MIN_SPEED) * randf())
 	apply_central_impulse(start_impulse)
+
+
+func init_material() -> void:
+	var material = PhysicsMaterial.new()
+	material.set_bounce(0.5)
+	set_physics_material_override(material)
+	set_linear_damp(0)
+	set_angular_damp(0)
 
 
 # Generate a random shape for a new asteroid

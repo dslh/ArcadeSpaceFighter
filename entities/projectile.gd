@@ -35,10 +35,6 @@ func set_can_bounce(value: bool = false) -> void:
 
 
 func _on_RigidBody2D_body_entered(body: Node) -> void:
-	if body.is_in_group("asteroid"):
-		body.take_damage()
-		queue_free()
-	
 	if body.is_in_group("enemy"):
 		body.take_damage()
 		queue_free()

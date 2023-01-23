@@ -137,12 +137,8 @@ func _fire_projectile() -> void:
 
 
 func _on_Player_body_entered(body: Node) -> void:
-	if body.is_in_group("asteroid"):
+	if body.is_in_group("enemy"):
 		take_damage(1)
-	elif body.is_in_group("enemy"):
-		take_damage(1)
-	else:
-		pass
 
 
 func _on_BouncingBulletTimer_timeout() -> void:
