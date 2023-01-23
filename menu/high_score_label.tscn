@@ -9,12 +9,21 @@ anchor_bottom = 1.0
 theme = ExtResource( 2 )
 script = ExtResource( 1 )
 
-[node name="Number" type="Label" parent="."]
+[node name="MC" type="MarginContainer" parent="."]
 margin_right = 637.0
 margin_bottom = 1080.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-align = 1
+custom_constants/margin_right = 96
+custom_constants/margin_left = 96
+
+[node name="Number" type="Label" parent="MC"]
+margin_left = 96.0
+margin_right = 541.0
+margin_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+align = 2
 valign = 1
 percent_visible = 0.0
 
