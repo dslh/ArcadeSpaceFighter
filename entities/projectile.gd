@@ -1,4 +1,3 @@
-class_name Projectile2D
 
 extends RigidBody2D
 
@@ -38,6 +37,9 @@ func _on_RigidBody2D_body_entered(body: Node) -> void:
 	if body.is_in_group("enemy"):
 		body.take_damage()
 		queue_free()
+		
+	if body is Entity2D:
+		body.take_damage()
 	
 	if body.is_in_group("player"):
 		body.take_damage()

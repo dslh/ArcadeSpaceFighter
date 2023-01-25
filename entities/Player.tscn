@@ -1,7 +1,6 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=19 format=2]
 
-[ext_resource path="res://entities/player.gd" type="Script" id=1]
-[ext_resource path="res://entities/projectile.tscn" type="PackedScene" id=2]
+[ext_resource path="res://entities/ship_player.gd" type="Script" id=1]
 [ext_resource path="res://entities/camera.gd" type="Script" id=3]
 [ext_resource path="res://entities/hud.gd" type="Script" id=4]
 [ext_resource path="res://entities/Laser.tscn" type="PackedScene" id=5]
@@ -88,7 +87,6 @@ physics_material_override = SubResource( 11 )
 contacts_reported = 1
 contact_monitor = true
 script = ExtResource( 1 )
-projectile = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
 polygon = PoolVector2Array( -8, -48, 8, -48, 16, -8, 56, 8, 56, 16, 32, 24, 24, 24, 24, 32, -24, 32, -24, 24, -32, 24, -56, 16, -56, 8, -16, -8 )
