@@ -16,6 +16,7 @@ const MAX_RADIUS = 12
 const POINTS = 18
 const PROJECTILE_MASS = 0.1
 const NUMBER_OF_CONTACTS = 1
+const SPARKS = preload("res://effects/bullet_sparks.tscn")
 # --- Exported Variables ---
 
 
@@ -51,7 +52,8 @@ func _ready() -> void:
 
 
 # --- Virtual methods ---
-
+func _integrate_forces(state):
+	Sparks.emit_from_collisions(state, SPARKS, get_parent())
 
 # --- Public methods ---
 # defines the physics properites of the projectile

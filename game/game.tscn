@@ -45,6 +45,9 @@ curve = SubResource( 2 )
 [node name="EntitySpawnPoint" type="PathFollow2D" parent="EntityPath"]
 position = Vector2( -1216, -768 )
 
+[node name="GarbageCollector" type="Timer" parent="."]
+autostart = true
+
 [node name="PowerupManager" type="Node" parent="."]
 script = ExtResource( 2 )
 health = ExtResource( 6 )
@@ -77,3 +80,4 @@ autostart = true
 [connection signal="timeout" from="PowerupManager/Timer" to="PowerupManager" method="_on_Timer_timeout"]
 [connection signal="timeout" from="UFOTimer" to="." method="_on_UFOTimer_timeout"]
 [connection signal="timeout" from="AsteroidTimer" to="." method="_on_AsteroidTimer_timeout"]
+[connection signal="timeout" from="GarbageCollector" to="." method="free_explosions"]

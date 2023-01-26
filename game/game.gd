@@ -23,4 +23,12 @@ func _on_AsteroidTimer_timeout() -> void:
 	var a = Asteroid.new()
 	entity_spawn_point.offset = randi()
 	a.position = entity_spawn_point.position
+	a.fling_at(Vector2.ZERO)
 	$EntityContainer.add_child(a)
+
+
+
+func free_explosions():
+	for emitter in get_tree().get_nodes_in_group("explosions"):
+		if not emitter.emitting:
+			emitter.queue_free()
