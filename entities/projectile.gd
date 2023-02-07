@@ -14,8 +14,6 @@ var bounce_number: int = 0
 func _ready() -> void:
 	var start_impulse: Vector2 = direction * IMPULSE_FACTOR
 	apply_central_impulse(start_impulse)
-	
-
 
 
 func set_direction(value: Vector2 = Vector2.UP) -> void:

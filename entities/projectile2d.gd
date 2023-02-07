@@ -14,6 +14,8 @@ extends RigidBody2D
 const IMPULSE_FACTOR = 1000
 const MAX_RADIUS = 12
 const POINTS = 18
+const PROJECTILE_MASS = 0.1
+const NUMBER_OF_CONTACTS = 1
 # --- Exported Variables ---
 
 
@@ -24,15 +26,16 @@ const POINTS = 18
 var direction = Vector2.UP setget set_direction
 var can_bounce: bool = false setget set_can_bounce
 var bounce_number: int = 0
-var projectile_colour: Color = Color(0.16, 0.68, 1, 1)
 
 # --- Onready Variables ---
 
 
 # --- Virtual _init method ---
-func _init(radius: int = MAX_RADIUS, parent: Node = self) -> void:
+func _init(radius: int = MAX_RADIUS, parent: Node = self, color: Color = Color.white) -> void:
+	# configure physics
+	set_physics_properties()
 	# draw the polygon
-	set_drawn_shape(radius)
+	set_drawn_shape(radius, color)
 	# add a collision shape
 	set_collision_shape(radius)
 	# visibility notifier for going off screen
@@ -51,8 +54,20 @@ func _ready() -> void:
 
 
 # --- Public methods ---
+# defines the physics properites of the projectile
+func set_physics_properties() -> void:
+	var physics_material = preload("res://entities/projectile_physics_material.tres")
+	set_physics_material_override(physics_material)
+	set_mass(PROJECTILE_MASS)
+	continuous_cd = RigidBody2D.CCD_MODE_CAST_SHAPE
+	set_max_contacts_reported(NUMBER_OF_CONTACTS)
+	set_contact_monitor(true)
+	set_linear_damp(0)
+	set_angular_damp(0)
+
+
 # Set the visible shape of a new projectile
-func set_drawn_shape(radius: int) -> void:
+func set_drawn_shape(radius: int, color: Color) -> void:
 	var polygon = Polygon2D.new()
 	# particles will be a circle
 	var outline: PoolVector2Array = []
@@ -61,7 +76,7 @@ func set_drawn_shape(radius: int) -> void:
 		var angle: float = PI * 2 * i / POINTS
 		outline[i] = Vector2.UP.rotated(angle) * radius
 	polygon.set_polygon(outline)
-	polygon.set_color(projectile_colour)
+	polygon.set_color(color)
 	add_child(polygon)
 
 
@@ -92,7 +107,6 @@ func add_visibility_notifier() -> void:
 
 # --- Private methods ---
 func _on_body_entered(body: Node) -> void:
-	print("hit something!")
 	# damge entities
 	if body is Entity2D:
 		body.take_damage()
@@ -101,6 +115,7 @@ func _on_body_entered(body: Node) -> void:
 	bounce_number -= 1 
 	if bounce_number < 0:
 		queue_free()
+
 
 func _on_screen_exited() -> void:
 	queue_free()

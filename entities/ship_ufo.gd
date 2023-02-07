@@ -12,7 +12,10 @@ extends Ship2D
 
 # --- Constants ---
 const THRUST_IMPULSE_FACTOR = 20.0
-
+const UFO_POJECTILE_COLOR: Color = Color(0.58, 0.13, 0.42, 1)
+const CANNON_COOLDOWN_NORMAL: float = 2.0
+const CANNON_COOLDOWN_BOUNCING: float = 0.5
+const BOUNCING_BULLET_TIME: float = 5.0
 # --- Exported Variables ---
 
 
@@ -38,12 +41,8 @@ func _physics_process(delta: float) -> void:
 	
 	if player:
 		thrust_impulse = global_position.direction_to(player.get_global_position())
-		_fire_projectile(
-			get_global_position(),
-			global_position.direction_to(player.get_global_position()),
-			self,
-			$ProjectileContainer
-		)
+		if $ShootTimer.is_stopped():
+			_shoot()
 	else:
 		thrust_impulse = global_position.direction_to(Vector2.ZERO)
 	
@@ -53,14 +52,30 @@ func _physics_process(delta: float) -> void:
 
 
 # --- Public methods ---
-
+func apply_bouncing_bullet_powerup() -> void:
+	set_bouncing_bullets_active(true)
+	$BouncingBulletTimer.start(BOUNCING_BULLET_TIME)
 
 # --- Private methods ---
+func _shoot() -> void:
+	_fire_projectile(
+		get_global_position(),
+		global_position.direction_to(player.get_global_position()),
+		self,
+		$ProjectileContainer,
+		UFO_POJECTILE_COLOR
+	)
+	var shoot_cooldown: float = CANNON_COOLDOWN_BOUNCING if bouncing_bullets_active else CANNON_COOLDOWN_NORMAL
+	$ShootTimer.start(shoot_cooldown)
+
+
 func _on_PlayerSensor_body_entered(body: Node) -> void:
 	if body.is_in_group("player"):
+		print("detected player!!!")
 		player = body
 
-
+func _on_BouncingBulletTimer_timeout() -> void:
+	set_bouncing_bullets_active(false)
 
 # --- SetGet functions ---
 

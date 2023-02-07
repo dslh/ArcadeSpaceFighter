@@ -13,12 +13,11 @@ extends Ship2D
 # --- Constants ---
 const THRUST_IMPULSE_FACTOR = 10.0
 const TURN_IMPULSE_FACTOR = 50.0
-
 const MAX_TURN_SPEED = PI
-
 const MAX_SPEED = 100
 const MAX_DAMP = 20
-
+const PROJECTILE_COLOR: Color = Color(0.16, 0.68, 1, 1)
+const BOUNCING_BULLET_TIME: float = 8.0
 # --- Exported Variables ---
 
 
@@ -36,6 +35,8 @@ var laser_active: bool = false
 
 
 # --- Virtual _ready method ---
+func _ready() -> void:
+	add_to_group("player")
 
 
 # --- Virtual methods ---
@@ -86,6 +87,19 @@ func _physics_process(delta: float) -> void:
 
 
 # --- Public methods ---
+func damage_taken() -> void:
+	$Camera/Camera2D/CanvasLayer/HUD.update_health_bar(hp)
+
+
+func entity_destroyed() -> void:
+	EventBus.emit_signal("game_over")
+	set_physics_process(false)
+	$CollisionShape2D.call_deferred("set_disabled", true)
+
+
+func apply_bouncing_bullet_powerup() -> void:
+	set_bouncing_bullets_active(true)
+	$BouncingBulletTimer.start(BOUNCING_BULLET_TIME)
 
 
 # --- Private methods ---
@@ -94,15 +108,19 @@ func _shoot() -> void:
 		$LeftCannon.get_global_position(), 
 		-transform.y, 
 		self,
-		$ProjectileContainer
+		$ProjectileContainer,
+		PROJECTILE_COLOR
 	)
 	_fire_projectile(
 		$RightCannon.get_global_position(), 
 		-transform.y, 
 		self, 
-		$ProjectileContainer
+		$ProjectileContainer,
+		PROJECTILE_COLOR
 	)
-	$CannonTimer.start(0.25)
+	var shoot_cooldown: float = 0.1 if bouncing_bullets_active else 0.25
+	$CannonTimer.start(shoot_cooldown)
+
 
 func _on_Player_body_entered(body: Node) -> void:
 	take_damage(1)
