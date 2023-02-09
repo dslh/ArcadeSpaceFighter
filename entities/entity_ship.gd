@@ -1,58 +1,39 @@
-# ---------------------------------------------------
-# Class
-# ---------------------------------------------------
+# --- Class ---
 class_name Ship2D
-# ---------------------------------------------------
-# Extends
-# ---------------------------------------------------
+
+# --- Extends ---
 extends Entity2D
 
-# ---------------------------------------------------
-# Siganls
-# ---------------------------------------------------
+# --- Siganls ---
 
-# ---------------------------------------------------
-# ENUMS
-# ---------------------------------------------------
 
-# ---------------------------------------------------
-# Constants
-# ---------------------------------------------------
+# --- ENUMS ---
+
+
+# --- Constants ---
 const MAX_HP:int = 10
 const BOUNCING_PROJECTILE_COLOR: Color = Color(1.0, 0.52, 0.15, 1)
 const SPRAY: float = 0.1
-# ---------------------------------------------------
-# Exported Variables 
-# ---------------------------------------------------
+# --- Exported Variables ---
 export var projectile_radius: int = 12
-# ---------------------------------------------------
-# Public Variables
-# ---------------------------------------------------
+# --- Public Variables ---
 var bouncing_bullets_active: bool = false setget set_bouncing_bullets_active
-# ---------------------------------------------------
-# Private Variables
-# ---------------------------------------------------
+# --- Private Variables ---
 
-# ---------------------------------------------------
-# Onready Variables
-# ---------------------------------------------------
 
-# ---------------------------------------------------
-# Virtual _init method
-# ---------------------------------------------------
+# --- Onready Variables ---
 
-# ---------------------------------------------------
-# Virtual _ready method
-# ---------------------------------------------------
 
-# ---------------------------------------------------
-# Virtual methods
-# ---------------------------------------------------
+# --- Virtual _init method ---
 
-# ---------------------------------------------------
-# Public methods
-# ---------------------------------------------------
 
+# --- Virtual _ready method ---
+
+
+# --- Virtual methods ---
+
+
+# --- Public methods ---
 func apply_health_powerup(value: int = 1) -> void:
 	# HP can not go over MAX_HP
 	var max_change = MAX_HP - hp
@@ -68,10 +49,7 @@ func apply_bouncing_bullet_powerup() -> void:
 	set_bouncing_bullets_active(true)
 
 
-# ---------------------------------------------------
-# Private methods
-# ---------------------------------------------------
-
+# --- Private methods ---
 func _fire_projectile(pos: Vector2, dir: Vector2, exception: Node, container: Node, color: Color = Color.white) -> void:
 	var projectile_color: Color = BOUNCING_PROJECTILE_COLOR if bouncing_bullets_active else color
 	var p: Projectile2D = Projectile2D.new(projectile_radius, exception, projectile_color)
@@ -83,9 +61,6 @@ func _fire_projectile(pos: Vector2, dir: Vector2, exception: Node, container: No
 	container.add_child(p)
 
 
-
-# ---------------------------------------------------
-# SetGet functions
-# ---------------------------------------------------
+# --- SetGet functions ---
 func set_bouncing_bullets_active(value: bool = false) -> void:
 	bouncing_bullets_active = value

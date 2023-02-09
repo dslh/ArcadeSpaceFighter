@@ -45,6 +45,22 @@ curve = SubResource( 2 )
 [node name="EntitySpawnPoint" type="PathFollow2D" parent="EntityPath"]
 position = Vector2( -1216, -768 )
 
+[node name="PowerupManager" type="Node" parent="."]
+script = ExtResource( 2 )
+health = ExtResource( 6 )
+bouncing = ExtResource( 8 )
+laser = ExtResource( 9 )
+
+[node name="Timer" type="Timer" parent="PowerupManager"]
+wait_time = 10.0
+autostart = true
+
+[node name="Health" parent="PowerupManager" instance=ExtResource( 6 )]
+position = Vector2( -484, -206 )
+
+[node name="BouncingBullletPowerup" parent="PowerupManager" instance=ExtResource( 8 )]
+position = Vector2( -595, -267 )
+
 [node name="UFOTimer" type="Timer" parent="."]
 wait_time = 8.0
 autostart = true
@@ -58,19 +74,6 @@ autostart = true
 
 [node name="Boundary" parent="." instance=ExtResource( 5 )]
 
-[node name="PowerupManager" type="Node" parent="."]
-script = ExtResource( 2 )
-health = ExtResource( 6 )
-bouncing = ExtResource( 8 )
-laser = ExtResource( 9 )
-
-[node name="Timer" type="Timer" parent="PowerupManager"]
-wait_time = 10.0
-autostart = true
-
-[node name="BouncingBullletPowerup" parent="PowerupManager" instance=ExtResource( 8 )]
-position = Vector2( -595, -267 )
-
+[connection signal="timeout" from="PowerupManager/Timer" to="PowerupManager" method="_on_Timer_timeout"]
 [connection signal="timeout" from="UFOTimer" to="." method="_on_UFOTimer_timeout"]
 [connection signal="timeout" from="AsteroidTimer" to="." method="_on_AsteroidTimer_timeout"]
-[connection signal="timeout" from="PowerupManager/Timer" to="PowerupManager" method="_on_Timer_timeout"]

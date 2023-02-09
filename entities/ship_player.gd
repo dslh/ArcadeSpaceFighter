@@ -123,7 +123,8 @@ func _shoot() -> void:
 
 
 func _on_Player_body_entered(body: Node) -> void:
-	take_damage(1)
+	if body.is_in_group("enemy"):
+		take_damage(1)
 
 
 func _on_BouncingBulletTimer_timeout() -> void:

@@ -129,4 +129,9 @@ func compute_mass(outline: PoolVector2Array) -> void:
 	print(area, "  ", SIZE_LIMIT, " ", MASS_LIMIT * area / SIZE_LIMIT)
 	set_mass(MASS_LIMIT * (area / SIZE_LIMIT))
 
+
+func entity_destroyed() -> void:
+	EventBus.emit_signal("asteroid_destroyed", 10)
+	queue_free()
+
 # --- SetGet functions ---

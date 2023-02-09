@@ -41,7 +41,7 @@ func _physics_process(delta: float) -> void:
 	
 	if player:
 		thrust_impulse = global_position.direction_to(player.get_global_position())
-		if $ShootTimer.is_stopped():
+		if $ShootTimer.is_stopped() && $VisibilityNotifier2D.is_on_screen():
 			_shoot()
 	else:
 		thrust_impulse = global_position.direction_to(Vector2.ZERO)
@@ -55,6 +55,11 @@ func _physics_process(delta: float) -> void:
 func apply_bouncing_bullet_powerup() -> void:
 	set_bouncing_bullets_active(true)
 	$BouncingBulletTimer.start(BOUNCING_BULLET_TIME)
+
+
+func entity_destroyed() -> void:
+	EventBus.emit_signal("ufo_destroyed", 100)
+	queue_free()
 
 # --- Private methods ---
 func _shoot() -> void:
