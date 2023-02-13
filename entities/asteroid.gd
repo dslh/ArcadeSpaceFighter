@@ -23,21 +23,24 @@ const SIZE_LIMIT = PI * pow(MIN_RADIUS + RADIUS_RANGE + MIN_NOISE + NOISE_RANGE,
 
 var hp: int = 10
 
+
 func _init() -> void:
 	init_material()
-	
+
 	var outline = create_outline()
 	set_collision_shape(outline)
 	set_drawn_shape(outline)
 	compute_mass(outline)
 
+
 func _ready() -> void:
 	add_to_group("enemy")
-	var start_impulse: Vector2 = \
-		(Vector2.ZERO - get_global_position()) \
-			.normalized() \
-			.rotated(DIRECTION_RANGE * 2 * randf() - DIRECTION_RANGE) \
-			* (MIN_SPEED + (MAX_SPEED - MIN_SPEED) * randf())
+	var start_impulse: Vector2 = (
+		(Vector2.ZERO - get_global_position()).normalized().rotated(
+			DIRECTION_RANGE * 2 * randf() - DIRECTION_RANGE
+		)
+		* (MIN_SPEED + (MAX_SPEED - MIN_SPEED) * randf())
+	)
 	apply_central_impulse(start_impulse)
 
 
@@ -55,26 +58,27 @@ func create_outline() -> PoolVector2Array:
 	# Some asteroids will have lots of detail, some will be chunky
 	var count = MIN_SEGMENTS + randi() % SEGMENT_RANGE
 	var step = PI * 2 / count
-	
+
 	# Minimum radius for each point in the asteroid, 16-48
 	# Some asteroids will be big, some not so big.
 	var radius = MIN_RADIUS + randi() % RADIUS_RANGE
-	
+
 	# Maximum amount of random noise to be added to a point's radius, 8-32
 	# Some asteroids will be smooth, some will be spiky.
 	var noise = MIN_NOISE + randi() % NOISE_RANGE
-	
+
 	var points = []
 	# Avoid using append when we know the final size of the array.
 	points.resize(count)
-	
+
 	for i in count:
 		# Vary the angle between points by one step, for extra irregularity.
 		var angle = step * i + randf() * step
 		var dist = radius + noise * randf()
 		points[i] = Vector2(sin(angle) * dist, cos(angle) * dist)
-		
+
 	return PoolVector2Array(points)
+
 
 # Set the hitbox for a new asteroid
 func set_collision_shape(outline: PoolVector2Array) -> void:
@@ -84,12 +88,11 @@ func set_collision_shape(outline: PoolVector2Array) -> void:
 	var triangles = Geometry.triangulate_polygon(outline)
 	for i in range(0, len(triangles), 3):
 		var shape = ConvexPolygonShape2D.new()
-		shape.set_points([
-			outline[triangles[i]],
-			outline[triangles[i + 1]],
-			outline[triangles[i + 2]]
-		])
+		shape.set_points(
+			[outline[triangles[i]], outline[triangles[i + 1]], outline[triangles[i + 2]]]
+		)
 		shape_owner_add_shape(owner, shape)
+
 
 # Set the visible shape of a new asteroid
 func set_drawn_shape(outline: PoolVector2Array) -> void:
@@ -98,6 +101,7 @@ func set_drawn_shape(outline: PoolVector2Array) -> void:
 	polygon.set_color(Color(0.372549, 0.341176, 0.309804, 1))
 	add_child(polygon)
 
+
 func compute_mass(outline: PoolVector2Array) -> void:
 	var area: float = 0
 	var n = len(outline)
@@ -105,7 +109,7 @@ func compute_mass(outline: PoolVector2Array) -> void:
 		area += outline[i].x * outline[(i + 1) % n].y
 		area -= outline[i].y * outline[(i + 1) % n].x
 	area = abs(area) / 2
-	
+
 	print(area, "  ", SIZE_LIMIT, " ", MASS_LIMIT * area / SIZE_LIMIT)
 	set_mass(MASS_LIMIT * (area / SIZE_LIMIT))
 

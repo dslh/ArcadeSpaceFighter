@@ -1,6 +1,5 @@
 extends RigidBody2D
 
-
 const THRUST_IMPULSE_FACTOR = 20.0
 
 export(PackedScene) var projectile
@@ -12,21 +11,21 @@ var player: Node
 
 func _physics_process(delta: float) -> void:
 	var thrust_impulse: Vector2
-	
+
 	if player:
 		thrust_impulse = global_position.direction_to(player.get_global_position())
 		_fire_projectile()
 	else:
 		thrust_impulse = global_position.direction_to(Vector2.ZERO)
-	
+
 	$Shapes.rotation += delta
-	
+
 	apply_central_impulse(thrust_impulse * THRUST_IMPULSE_FACTOR)
 
 
 func take_damage(value: int = 1) -> void:
 	hp -= value
-	
+
 	if hp <= 0:
 		EventBus.emit_signal("ufo_destroyed", 100)
 		queue_free()
@@ -48,7 +47,7 @@ func _fire_projectile() -> void:
 func _on_PlayerSensor_body_entered(body: Node) -> void:
 	if player:
 		return
-	
+
 	if body.is_in_group("player"):
 		player = body
 
