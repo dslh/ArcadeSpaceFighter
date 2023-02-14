@@ -132,6 +132,6 @@ func compute_mass(outline: PoolVector2Array) -> void:
 
 func entity_destroyed() -> void:
 	EventBus.emit_signal("asteroid_destroyed", 10)
-	queue_free()
+	.entity_destroyed()
 
 # --- SetGet functions ---
