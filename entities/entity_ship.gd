@@ -62,5 +62,5 @@ func _fire_projectile(pos: Vector2, dir: Vector2, exception: Node, container: No
 
 
 # --- SetGet functions ---
-func set_bouncing_bullets_active(value: bool = false) -> void:
+func set_bouncing_bullets_active(value: bool) -> void:
 	bouncing_bullets_active = value
