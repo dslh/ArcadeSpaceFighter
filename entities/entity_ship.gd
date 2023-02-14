@@ -36,12 +36,8 @@ var bouncing_bullets_active: bool = false setget set_bouncing_bullets_active
 # --- Public methods ---
 func apply_health_powerup(value: int = 1) -> void:
 	# HP can not go over MAX_HP
-	var max_change = MAX_HP - hp
 	# negate the damage to cause HP to increase
-	if max_change < value:
-		take_damage(-max_change)
-	else:
-		take_damage(-value)
+	take_damage(-min(MAX_HP - hp, value))
 
 
 # overrideable
