@@ -59,7 +59,7 @@ func _physics_process(delta: float) -> void:
 	if turn == 0.0:
 		angular_damp = clamp(angular_damp + delta, 0.5, MAX_DAMP)
 	else:
-		angular_damp = 0.5
+		angular_damp = 1
 	
 	if angular_velocity < MAX_TURN_SPEED:
 		apply_torque_impulse(turn*TURN_IMPULSE_FACTOR)
@@ -69,11 +69,14 @@ func _physics_process(delta: float) -> void:
 	# thrust goes "backwards" to push player forwards
 	var thrust_input: float = Input.get_action_strength("break") - Input.get_action_strength("thrust")
 	var thrust_impulse: Vector2 = (thrust_input * THRUST_IMPULSE_FACTOR) * transform.y
+	# add the strafe to the thrust to push the ship laterally
+	var strafe_input: float = Input.get_action_strength("strafe_right") - Input.get_action_strength("strafe_left")
+	thrust_impulse += (strafe_input * THRUST_IMPULSE_FACTOR) * transform.x
 	
-	if thrust_input == 0.0:
-		linear_damp = clamp(linear_damp + delta, 0.25, MAX_DAMP)
+	if thrust_input == 0.0 && strafe_input == 0.0:
+		linear_damp = clamp(linear_damp + delta, 0.5, MAX_DAMP)
 	else:
-		linear_damp = 0.25
+		linear_damp = 0.5
 	
 	apply_central_impulse(thrust_impulse)
 	

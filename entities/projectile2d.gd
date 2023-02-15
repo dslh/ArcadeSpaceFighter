@@ -108,7 +108,7 @@ func add_visibility_notifier() -> void:
 # --- Private methods ---
 func _on_body_entered(body: Node) -> void:
 	# damge entities
-	if body is Entity2D:
+	if body.has_method("take_damage"):
 		body.take_damage()
 		queue_free()
 	# for bouncing bullets, reduce the bounce count and delete when depleted.

@@ -59,7 +59,7 @@ func apply_bouncing_bullet_powerup() -> void:
 
 func entity_destroyed() -> void:
 	EventBus.emit_signal("ufo_destroyed", 100)
-	queue_free()
+	.entity_destroyed()
 
 # --- Private methods ---
 func _shoot() -> void:
