@@ -1,4 +1,3 @@
-class_name Projectile2D
 
 extends RigidBody2D
 
@@ -15,8 +14,6 @@ var bounce_number: int = 0
 func _ready() -> void:
 	var start_impulse: Vector2 = direction * IMPULSE_FACTOR
 	apply_central_impulse(start_impulse)
-	
-
 
 
 func set_direction(value: Vector2 = Vector2.UP) -> void:
@@ -38,6 +35,9 @@ func _on_RigidBody2D_body_entered(body: Node) -> void:
 	if body.is_in_group("enemy"):
 		body.take_damage()
 		queue_free()
+		
+	if body is Entity2D:
+		body.take_damage()
 	
 	if body.is_in_group("player"):
 		body.take_damage()

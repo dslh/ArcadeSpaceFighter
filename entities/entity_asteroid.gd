@@ -1,6 +1,14 @@
+# --- Class ---
 class_name Asteroid
-extends RigidBody2D
 
+# --- Extends ---
+extends Entity2D
+
+# --- Siganls ---
+
+# --- ENUMS ---
+
+# --- Constants ---
 const DIRECTION_RANGE = PI / 8
 const MIN_SPEED = 200
 const MAX_SPEED = 600
@@ -21,8 +29,15 @@ const MASS_LIMIT = 50.0
 # Maximum possible size if we happen to generate a perfect circle
 const SIZE_LIMIT = PI * pow(MIN_RADIUS + RADIUS_RANGE + MIN_NOISE + NOISE_RANGE, 2)
 
-var hp: int = 10
+# --- Exported Variables ---
 
+# --- Public Variables ---
+
+# --- Private Variables ---
+
+# --- Onready Variables ---
+
+# --- Constructor ---
 func _init() -> void:
 	init_material()
 	
@@ -31,6 +46,7 @@ func _init() -> void:
 	set_drawn_shape(outline)
 	compute_mass(outline)
 
+# --- Ready Function ---
 func _ready() -> void:
 	add_to_group("enemy")
 	var start_impulse: Vector2 = \
@@ -40,14 +56,17 @@ func _ready() -> void:
 			* (MIN_SPEED + (MAX_SPEED - MIN_SPEED) * randf())
 	apply_central_impulse(start_impulse)
 
+# --- Virtual methods ---
 
+# --- Public methods ---
+
+# --- Private methods ---
 func init_material() -> void:
 	var material = PhysicsMaterial.new()
 	material.set_bounce(0.5)
 	set_physics_material_override(material)
 	set_linear_damp(0)
 	set_angular_damp(0)
-
 
 # Generate a random shape for a new asteroid
 func create_outline() -> PoolVector2Array:
@@ -98,6 +117,7 @@ func set_drawn_shape(outline: PoolVector2Array) -> void:
 	polygon.set_color(Color(0.372549, 0.341176, 0.309804, 1))
 	add_child(polygon)
 
+
 func compute_mass(outline: PoolVector2Array) -> void:
 	var area: float = 0
 	var n = len(outline)
@@ -110,9 +130,8 @@ func compute_mass(outline: PoolVector2Array) -> void:
 	set_mass(MASS_LIMIT * (area / SIZE_LIMIT))
 
 
-func take_damage(value: int = 1) -> void:
-	hp -= value
+func entity_destroyed() -> void:
+	EventBus.emit_signal("asteroid_destroyed", 10)
+	.entity_destroyed()
 
-	if hp <= 0:
-		EventBus.emit_signal("asteroid_destroyed", 10)
-		queue_free()
+# --- SetGet functions ---
