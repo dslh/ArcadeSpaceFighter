@@ -77,7 +77,7 @@ autostart = true
 
 [node name="Boundary" parent="." instance=ExtResource( 5 )]
 
+[connection signal="timeout" from="GarbageCollector" to="." method="free_explosions"]
 [connection signal="timeout" from="PowerupManager/Timer" to="PowerupManager" method="_on_Timer_timeout"]
 [connection signal="timeout" from="UFOTimer" to="." method="_on_UFOTimer_timeout"]
 [connection signal="timeout" from="AsteroidTimer" to="." method="_on_AsteroidTimer_timeout"]
-[connection signal="timeout" from="GarbageCollector" to="." method="free_explosions"]
