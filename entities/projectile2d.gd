@@ -53,7 +53,11 @@ func _ready() -> void:
 
 # --- Virtual methods ---
 func _integrate_forces(state):
-	Sparks.emit_from_collisions(state, SPARKS, get_parent())
+	for i in state.get_contact_count():
+		# Otherwise we get sparks when projectiles bounce off the screen edges
+		# or off each other.
+		if state.get_contact_collider_object(i).has_method("take_damage"):
+			Sparks.emit_from_collision(state, i, SPARKS, get_parent())
 
 # --- Public methods ---
 # defines the physics properites of the projectile
