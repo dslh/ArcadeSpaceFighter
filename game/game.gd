@@ -27,8 +27,5 @@ func _on_AsteroidTimer_timeout() -> void:
 	$EntityContainer.add_child(a)
 
 
-
 func free_explosions():
-	for emitter in get_tree().get_nodes_in_group("explosions"):
-		if not emitter.emitting:
-			emitter.queue_free()
+	Sparks.garbage_collect(get_tree())
