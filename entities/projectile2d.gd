@@ -98,7 +98,8 @@ func set_collision_shape(radius: int) -> void:
 func add_collisions(parent: Node) -> void:
 	set_contact_monitor(true)
 	set_max_contacts_reported(1) 
-	add_collision_exception_with(parent)
+	if parent:
+		add_collision_exception_with(parent)
 	#connect signals
 	connect("body_entered", self, "_on_body_entered")
 

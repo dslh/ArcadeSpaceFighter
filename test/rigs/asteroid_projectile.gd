@@ -1,7 +1,5 @@
 extends Node2D
 
-export(PackedScene) var projectile_scene
-
 const ASTEROID_POS = Vector2(500.0, 500.0)
 const PROJECTILE_POS = Vector2(100.0, 500.0)
 
@@ -25,7 +23,7 @@ func create_asteroid():
 	$entity_container.add_child(asteroid)
 
 func fire_projectile():
-	var projectile = projectile_scene.instance() as Projectile2D
+	var projectile = Projectile2D.new(6, null, Color(0.16, 0.68, 1, 1))
 	projectile.set_position(PROJECTILE_POS)
 	projectile.set_direction((ASTEROID_POS - PROJECTILE_POS).normalized())
 	$entity_container.add_child(projectile)
