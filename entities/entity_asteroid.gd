@@ -26,20 +26,26 @@ const NOISE_RANGE = 24
 
 # Constants for mass calculation
 const MASS_LIMIT = 50.0
+# Maximum possible radius for any point
+const RADIUS_LIMIT = MIN_RADIUS + RADIUS_RANGE + MIN_NOISE + NOISE_RANGE
 # Maximum possible size if we happen to generate a perfect circle
-const SIZE_LIMIT = PI * pow(MIN_RADIUS + RADIUS_RANGE + MIN_NOISE + NOISE_RANGE, 2)
+const SIZE_LIMIT = PI * pow(RADIUS_LIMIT, 2)
 
 # --- Exported Variables ---
 
 # --- Public Variables ---
 
 # --- Private Variables ---
+var _sparks = preload("res://effects/asteroid_sparks.tscn")
 
 # --- Onready Variables ---
 
 # --- Constructor ---
+
 func _init() -> void:
 	init_material()
+	contact_monitor = true
+	contacts_reported = 5
 	
 	var outline = create_outline()
 	set_collision_shape(outline)
@@ -49,16 +55,21 @@ func _init() -> void:
 # --- Ready Function ---
 func _ready() -> void:
 	add_to_group("enemy")
+
+# --- Virtual methods ---
+func _integrate_forces(state):
+	Sparks.emit_from_collisions(state, _sparks, get_parent())
+
+# --- Public methods ---
+# Should be called when a new asteroid is created.
+# Gives the asteroid a push in the vague direction of the target.
+func fling_at(target: Vector2):
 	var start_impulse: Vector2 = \
-		(Vector2.ZERO - get_global_position()) \
+		(target - get_global_position()) \
 			.normalized() \
 			.rotated(DIRECTION_RANGE * 2 * randf() - DIRECTION_RANGE) \
 			* (MIN_SPEED + (MAX_SPEED - MIN_SPEED) * randf())
 	apply_central_impulse(start_impulse)
-
-# --- Virtual methods ---
-
-# --- Public methods ---
 
 # --- Private methods ---
 func init_material() -> void:
@@ -126,7 +137,6 @@ func compute_mass(outline: PoolVector2Array) -> void:
 		area -= outline[i].y * outline[(i + 1) % n].x
 	area = abs(area) / 2
 	
-	print(area, "  ", SIZE_LIMIT, " ", MASS_LIMIT * area / SIZE_LIMIT)
 	set_mass(MASS_LIMIT * (area / SIZE_LIMIT))
 
 

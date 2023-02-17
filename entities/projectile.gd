@@ -9,17 +9,13 @@ var can_bounce: bool = false setget set_can_bounce
 
 var bounce_number: int = 0
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var start_impulse: Vector2 = direction * IMPULSE_FACTOR
 	apply_central_impulse(start_impulse)
 
-
 func set_direction(value: Vector2 = Vector2.UP) -> void:
 	direction = value
-	
-
 
 func set_can_bounce(value: bool = false) -> void:
 	can_bounce = value

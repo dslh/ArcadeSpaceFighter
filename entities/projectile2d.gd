@@ -16,6 +16,7 @@ const MAX_RADIUS = 12
 const POINTS = 18
 const PROJECTILE_MASS = 0.1
 const NUMBER_OF_CONTACTS = 1
+const SPARKS = preload("res://effects/bullet_sparks.tscn")
 # --- Exported Variables ---
 
 
@@ -51,7 +52,12 @@ func _ready() -> void:
 
 
 # --- Virtual methods ---
-
+func _integrate_forces(state):
+	for i in state.get_contact_count():
+		# Otherwise we get sparks when projectiles bounce off the screen edges
+		# or off each other.
+		if state.get_contact_collider_object(i).has_method("take_damage"):
+			Sparks.emit_from_collision(state, i, SPARKS, get_parent())
 
 # --- Public methods ---
 # defines the physics properites of the projectile
@@ -92,7 +98,8 @@ func set_collision_shape(radius: int) -> void:
 func add_collisions(parent: Node) -> void:
 	set_contact_monitor(true)
 	set_max_contacts_reported(1) 
-	add_collision_exception_with(parent)
+	if parent:
+		add_collision_exception_with(parent)
 	#connect signals
 	connect("body_entered", self, "_on_body_entered")
 
